@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use math;
-use math::{Point2, Point3, Point4};
+use math::{scale_shift, Point2, Point3, Point4};
 use modules::{MultiFractal, NoiseModule, Perlin, Seedable};
 use num_traits::Float;
 
@@ -192,7 +192,7 @@ impl<T: Float> NoiseModule<Point2<T>, T> for RidgedMulti<T> {
 
         // Scale and shift the result into the [-1,1] range
         let scale = 2.0 - 0.5.powi(self.octaves as i32 - 1);
-        result.mul_add(math::cast(2.0 / scale), -T::one())
+        scale_shift(result, 2.0 / scale)
     }
 }
 
@@ -242,7 +242,7 @@ impl<T: Float> NoiseModule<Point3<T>, T> for RidgedMulti<T> {
 
         // Scale and shift the result into the [-1,1] range
         let scale = 2.0 - 0.5.powi(self.octaves as i32 - 1);
-        result.mul_add(math::cast(2.0 / scale), -T::one())
+        scale_shift(result, 2.0 / scale)
     }
 }
 
@@ -292,6 +292,6 @@ impl<T: Float> NoiseModule<Point4<T>, T> for RidgedMulti<T> {
 
         // Scale and shift the result into the [-1,1] range
         let scale = 2.0 - 0.5.powi(self.octaves as i32 - 1);
-        result.mul_add(math::cast(2.0 / scale), -T::one())
+        scale_shift(result, 2.0 / scale)
     }
 }

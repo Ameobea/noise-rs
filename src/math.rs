@@ -263,14 +263,32 @@ pub fn cast4<T, U>(x: Point4<T>) -> Point4<U>
     map4(x, cast)
 }
 
+#[cfg(not(target_os = "emscripten"))]
+pub fn scale_shift<T: Float>(value: T, n: f32) -> T {
+    value.abs().mul_add(cast(n), -T::one())
+}
+
+#[cfg(target_os = "emscripten")]
+pub fn scale_shift<T: Float>(value: T, n: f32) -> T {
+    (value.abs() * cast(n)) + -T::one()
+}
+
 pub mod interp {
     use math;
     use num_traits::Float;
 
     /// Performs linear interploation between two values.
+    #[cfg(not(target_os = "emscripten"))]
     #[inline]
     pub fn linear<T: Float>(a: T, b: T, x: T) -> T {
         x.mul_add((b - a), a)
+    }
+
+    /// Performs linear interploation between two values.
+    #[cfg(target_os = "emscripten")]
+    #[inline]
+    pub fn linear<T: Float>(a: T, b: T, x: T) -> T {
+        (x * (b - a)) + a
     }
 
     /// Performs cubic interpolation between two values bound between two other

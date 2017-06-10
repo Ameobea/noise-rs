@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use math;
-use math::{Point2, Point3, Point4};
+use math::{scale_shift, Point2, Point3, Point4};
 use modules::{MultiFractal, NoiseModule, Perlin, Seedable};
 use num_traits::Float;
 
@@ -135,7 +135,7 @@ impl<T: Float> NoiseModule<Point2<T>, T> for Billow<T> {
 
             // Take the abs of the signal, then scale and shift back to
             // the [-1,1] range.
-            signal = signal.abs().mul_add(math::cast(2.0), -T::one());
+            signal = scale_shift::<T>(signal, 2.0);
 
             // Scale the amplitude appropriately for this frequency.
             signal = signal * self.persistence.powi(math::cast(x));
@@ -165,7 +165,7 @@ impl<T: Float> NoiseModule<Point3<T>, T> for Billow<T> {
 
             // Take the abs of the signal, then scale and shift back to
             // the [-1,1] range.
-            signal = signal.abs().mul_add(math::cast(2.0), -T::one());
+            signal = scale_shift(signal, 2.0);
 
             // Scale the amplitude appropriately for this frequency.
             signal = signal * self.persistence.powi(math::cast(x));
@@ -195,7 +195,7 @@ impl<T: Float> NoiseModule<Point4<T>, T> for Billow<T> {
 
             // Take the abs of the signal, then scale and shift back to
             // the [-1,1] range.
-            signal = signal.abs().mul_add(math::cast(2.0), -T::one());
+            signal = scale_shift(signal, 2.0);
 
             // Scale the amplitude appropriately for this frequency.
             signal = signal * self.persistence.powi(math::cast(x));

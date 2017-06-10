@@ -49,6 +49,6 @@ impl<'a, T, U> NoiseModule<T, U> for Exponent<'a, T, U>
         value = (value + U::one()) / math::cast(2.0);
         value = value.abs();
         value = value.powf(self.exponent);
-        value.mul_add(math::cast(2.0), -U::one())
+        math::scale_shift::<U>(value, 2.0)
     }
 }

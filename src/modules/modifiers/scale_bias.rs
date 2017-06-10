@@ -50,7 +50,13 @@ impl<'a, T, U> ScaleBias<'a, T, U>
 impl<'a, T, U> NoiseModule<T, U> for ScaleBias<'a, T, U>
     where U: Float,
 {
+    #[cfg(not(target_os = "emscripten"))]
     fn get(&self, point: T) -> U {
         (self.source.get(point)).mul_add(self.scale, self.bias)
+    }
+
+    #[cfg(target_os = "emscripten")]
+    fn get(&self, point: T) -> U {
+        (self.source.get(point) * self.scale) + self.bias
     }
 }
